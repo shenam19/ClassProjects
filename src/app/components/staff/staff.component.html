@@ -1,0 +1,62 @@
+<section class="staffHeader">
+    <h1 id="pageTitle">Staff</h1>
+</section>
+
+
+<div id="form" class="card" *ngFor="let staff of staff">
+  <div class="card-body">
+    <form #staffForm="ngForm" (ngSubmit)="onSubmit(staffForm)">
+
+<!-- ================================================================= -->
+      <!-- PICTURE UPLOAD -->
+<!-- ================================================================= -->
+
+
+  <img *ngIf="downloadURL == undefined else imagePreview" id="imagePreview" src="{{this.staff.url}}">
+    <ng-template #imagePreview>
+          <img *ngIf="downloadURL !== undefined" id="imagePreview" [src]="downloadURL | async">
+    </ng-template>
+
+  <div class="form-group">
+    <!-- <label class="custom-file"> -->
+      <input type="file" id="file" name="files[]" class="" (change)="previewPicture($event)">
+      <p class="warningMessage" *ngIf="uploadTypeError"> WARNING: You didnt upload an image. A random image will be assigned to this event instead.</p>
+
+      <!-- <span class="custom-file-control"></span> -->
+    <!-- </label> -->
+  </div>
+
+      <!-- ================================================================= -->
+      <!-- About input -->
+      <!-- ================================================================= -->
+
+      <div class="form-group">
+          <label for="aboutStaff"> Text </label>
+        
+          <textarea 
+            type="text" 
+            class="form-control" 
+            name="aboutStaff"
+            #aboutStaff="ngModel"
+            [(ngModel)]="staff.aboutStaff" 
+            [ngClass]="{'is-invalid':aboutStaff.errors && aboutStaff.touched}"
+            rows="6"
+            minlength="120"
+            maxlength="500"
+            required 
+            [disabled]="editEnabled"
+            ></textarea>
+  
+          <div [hidden]="!aboutStaff.errors?.required" class="invalid-feedback">
+            Staff text is required
+          </div>
+          <div [hidden]="!aboutStaff.errors?.minlength" class="invalid-feedback">
+            Staff text must be at least 120 characters long
+          </div>
+        </div>
+
+        <input type="submit" value="Save Changes" class="btn btn-primary btn-block"> 
+  
+    </form>
+  </div>
+</div>
